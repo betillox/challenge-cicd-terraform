@@ -11,27 +11,27 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                sh 'aws-vault exec beto-devops -- terraform init'
             }
         }
         stage ("terraform fmt") {
             steps {
-                sh 'terraform fmt'
+                sh 'aws-vault exec beto-devops -- terraform fmt'
             }
 	}
         stage ("terraform validate") {
             steps {
-                sh 'terraform validate'
+                sh 'aws-vault exec beto-devops -- terraform validate'
             }
         }
         stage('Terraform Plan') {
             steps {
-            	sh 'terraform plan'    
+            	sh 'aws-vault exec beto-devops -- terraform plan'    
             }
         }
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply --auto-approve'
+                sh 'aws-vault exec beto-devops -- terraform apply --auto-approve'
             }
         }
     }
