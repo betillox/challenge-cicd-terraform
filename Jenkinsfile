@@ -1,16 +1,15 @@
 pipeline {
     agent any
-    
-    tools {
-        terraform 'jenkins-terraform'
-    }
+
     stages {
-        stage ("checkout from GIT") {
+        stage('Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'aa3e80aa-e369-421e-a28e-21c892e2e6da', url: 'https://github.com/BalarajuGolla/CICD-pipeline'
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/master']],
+                          userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform.git']]])
             }
         }
-        stage ("terraform init") {
+        stage('Terraform Init') {
             steps {
                 sh 'terraform init'
             }
@@ -19,21 +18,22 @@ pipeline {
             steps {
                 sh 'terraform fmt'
             }
-        }
+	}
         stage ("terraform validate") {
             steps {
                 sh 'terraform validate'
             }
         }
-        stage ("terrafrom plan") {
+        stage('Terraform Plan') {
             steps {
-                sh 'terraform plan '
+            	sh 'terraform plan'    
             }
         }
-        stage ("terraform apply") {
+        stage('Terraform Apply') {
             steps {
                 sh 'terraform apply --auto-approve'
             }
         }
     }
 }
+
