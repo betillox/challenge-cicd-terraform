@@ -1,2 +1,1 @@
-a fully automated CICD pipeline deployment from balaraju golla
-second attempt hellow balaraju golla
+A fully automated CICD pipeline deployment using Jenkins and Terraform.
