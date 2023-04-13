@@ -6,7 +6,7 @@ pipeline {
             steps {
                 checkout([$class: 'GitSCM',
                           branches: [[name: '*/master']],
-                          userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform.git']]])
+                          userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform']]])
             }
         }
         stage('Terraform Init') {
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh 'terraform fmt'
             }
-	}
+        }
         stage ("terraform validate") {
             steps {
                 sh 'terraform validate'
@@ -26,14 +26,16 @@ pipeline {
         }
         stage('Terraform Plan') {
             steps {
-            	sh 'terraform plan'    
+                sh 'terraform plan'
             }
         }
-        stage('Terraform Apply') {
+
+        stage ("terraform Action") {
             steps {
-                sh 'terraform destroy --auto-approve'
-            }
+                echo "Terraform action is --> ${action}"
+                sh ('terraform ${action} --auto-approve')
+           }
         }
-    }
-}
+     }
+  }
 
