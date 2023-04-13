@@ -1,12 +1,10 @@
-resource "aws_instance" "ec2-scg" {
-  ami           = "ami-06e46074ae430fba6"  # replace with your desired AMI ID
-  instance_type = "t2.micro"
-  key_name      = "my_keypair"                # replace with your SSH key name
-
-  vpc_security_group_ids = [aws_security_group.demo-sg.id]
-
-  tags = {
-    Name = "ec2-terraform"
+# Create AWS ec2 instance
+resource "aws_instance" "myFirstInstance" {
+  ami           = var.ami_id
+  key_name = var.key_name
+  instance_type = var.instance_type
+  security_groups= [var.security_group]
+  tags= {
+    Name = var.tag_name
   }
 }
-
