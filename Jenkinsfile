@@ -9,7 +9,16 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform']]])
             }
         }
-        stage('Terraform Init') {
+        
+	step
+	{	
+ 		emailext mimeType: ‘text/html’,
+ 		subject: “APPROVAL RQD[JENKINS] ${currentBuild.fullDisplayName}”,
+ 		to: “eumanachav@ucreativa.com“,
+ 		body: ‘’’<a href=”${BUILD_URL}input”>click to approve</a>’’’
+	}
+
+	stage('Terraform Init') {
             steps {
                 sh 'terraform init'
             }
