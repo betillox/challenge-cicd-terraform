@@ -29,7 +29,11 @@ pipeline {
                 sh 'terraform plan'
             }
         }
-
+        stage('Terraform Graph') {
+            steps {
+                sh 'terraform graph'
+            }
+        }
      }
   }
 
