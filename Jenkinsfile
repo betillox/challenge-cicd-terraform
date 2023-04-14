@@ -25,7 +25,7 @@ pipeline {
             )
             timeout(time: 7, unit: 'DAYS') {
                 // Wait for approval, timeout after 7 days
-                input message: 'Approve or Reject?', ok: 'Approve', submitter: approver
+                input message: 'Approve or Reject?', ok: 'Approve', submitter: 'eumanachav@ucreativa.com'
             }
         }
     }
