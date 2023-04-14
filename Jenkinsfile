@@ -9,14 +9,28 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform']]])
             }
         }
-        stage ('Deployment manual approval') {
-	    steps {		
- 			emailext mimeType: ‘text/html’,
- 			subject: “APPROVAL RQD[JENKINS] ${currentBuild.fullDisplayName}”,
- 			to: “eumanachav@ucreativa.com“,
- 			body: ‘’’<a href=”${BUILD_URL}input”>click to approve</a>’’’
-		}
-	}
+
+	stage('Approval') {
+    steps {
+        script {
+            def approver = emailextrecipients([[$class: 'CulpritsRecipientProvider']])
+            emailext (
+                to: eumanachav@ucreativa.com,
+                subject: 'Approval needed',
+                body: 'Please approve the deployment of the application.',
+                recipientProviders: [[$class: 'CulpritsRecipientProvider']],
+                replyTo: '$DEFAULT_REPLYTO',
+                attachLog: true,
+                mimeType: 'text/html'
+            )
+            timeout(time: 7, unit: 'DAYS') {
+                // Wait for approval, timeout after 7 days
+                input message: 'Approve or Reject?', ok: 'Approve', submitter: approver
+            }
+        }
+    }
+}
+
 	stage('Terraform Init') {
             steps {
                 sh 'terraform init'
