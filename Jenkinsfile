@@ -15,7 +15,7 @@ pipeline {
         script {
             def approver = emailextrecipients([[$class: 'CulpritsRecipientProvider']])
             emailext (
-                to: eumanachav@ucreativa.com,
+                to: 'eumanachav@ucreativa.com',
                 subject: 'Approval needed',
                 body: 'Please approve the deployment of the application.',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']],
