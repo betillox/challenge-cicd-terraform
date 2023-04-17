@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    options {
-        customWorkspace '/tmp/'
-    }
+    
     stages {
         stage('Checkout') {
             steps {
