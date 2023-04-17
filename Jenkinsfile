@@ -11,6 +11,9 @@ pipeline {
         }
 
 	stage('Approval') {
+		when {
+            branch "prod"
+        }
     steps {
         script {
             def approver = emailextrecipients([[$class: 'CulpritsRecipientProvider']])
@@ -61,9 +64,23 @@ pipeline {
         }
 	
 	stage('Terraform Apply') {
+		when {
+            branch "prod"
+        }
 	    steps {
 		    
 	    	sh 'terraform apply --auto-approve'
+		    
+            }
+	}	
+
+ 	stage('Terraform Graph') {
+		when {
+            branch "prod"
+        }
+	    steps {
+		    
+	    	sh 'terraform graph'
 		    
             }
 	}	
