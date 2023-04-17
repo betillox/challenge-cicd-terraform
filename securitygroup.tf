@@ -1,5 +1,5 @@
 #Create security group with firewall rules
-resource "aws_security_group" "my_security_group" {
+resource "aws_security_group" "sg_terraform" {
   name        = var.security_group
   description = "security group for Ec2 instance"
 
