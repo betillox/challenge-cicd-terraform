@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    options {
+        customWorkspace '/tmp/'
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -33,28 +35,38 @@ pipeline {
 
 	stage('Terraform Init') {
             steps {
+		    dir ('/tmp'){
                 sh 'terraform init'
+		    }
             }
         }
         stage ("terraform fmt") {
             steps {
+		    dir ('/tmp') {
                 sh 'terraform fmt'
+		    }
             }
         }
         stage ("terraform validate") {
             steps {
+		    dir ('/tmp') {
                 sh 'terraform validate'
+		    }
             }
         }
         stage('Terraform Plan') {
             steps {
+		    dir ('/tmp') {
                 sh 'terraform plan'
+		    }
             }
         }
 	
 	stage('Terraform Apply') {
 	    steps {
-	    	sh 'terraform apply --auto-approve' 
+		    dir ('/tmp') {
+	    	sh 'terraform apply --auto-approve'
+		    }
             }
 	}	
 
