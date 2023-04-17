@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
@@ -9,32 +9,51 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform']]])
             }
         }
-        stage('Terraform Init') {
+
+	stage('Approval') {
+    steps {
+        script {
+            def approver = emailextrecipients([[$class: 'CulpritsRecipientProvider']])
+            emailext (
+                to: 'eumanachav@ucreativa.com',
+                subject: 'Approval needed',
+                body: 'Please approve the deployment of the application.',
+                recipientProviders: [[$class: 'CulpritsRecipientProvider']],
+                replyTo: '$DEFAULT_REPLYTO',
+                attachLog: true,
+                mimeType: 'text/html'
+            )
+            timeout(time: 7, unit: 'DAYS') {
+                // Wait for approval, timeout after 7 days
+                input message: 'Approve or Reject?', ok: 'Approve', submitter: 'approver'
+            }
+        }
+    }
+}
+
+	stage('Terraform Init') {
             steps {
+	
                 sh 'terraform init'
+		    
             }
         }
-        stage ("terraform fmt") {
-            steps {
-                sh 'terraform fmt'
-            }
-        }
+        
         stage ("terraform validate") {
             steps {
+		    
                 sh 'terraform validate'
+		    
             }
         }
-        stage('Terraform Plan') {
-            steps {
-                sh 'terraform plan'
+	
+	stage('Terraform Destroy') {
+	    steps {
+		    
+	    	sh 'terraform destroy --auto-approve'
+		    
             }
-        }
+	}	
 
-        stage ("terraform Action") {
-            steps {
-                echo "Terraform action is --> ${action}"
-                sh ('terraform ${action} --auto-approve')
-           }
-        }
      }
   }
