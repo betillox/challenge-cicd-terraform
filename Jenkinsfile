@@ -6,7 +6,7 @@ pipeline {
             steps {
                 checkout([$class: 'GitSCM',
                           branches: [[name: '*/master']],
-                          userRemoteConfigs: [[url: 'https://github.com/betillox/challenge-cicd-terraform']]])
+                          userRemoteConfigs: [[url: 'https://github.com/betillox/CICD-EC2.git']]])
             }
         }
         stage('Terraform Init') {
