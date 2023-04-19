@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                          branches: [[name: '*/master']],
+                          branches: [[name: '*/Prod']],
                           userRemoteConfigs: [[url: 'https://github.com/betillox/CICD-EC2.git']]])
             }
         }
